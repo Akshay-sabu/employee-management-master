@@ -44,7 +44,9 @@ public class DailyScheduler {
                     HikeEntity hikeEntity=new HikeEntity();
                     hikeEntity.setEmployee(employee);
                     hikeEntity.setPrevSalary(employee.getGrossSalary());
-                    hikeEntity.setStatus(false);
+                    hikeEntity.setPrevPosition(employee.getDesignation());
+                    hikeEntity.setIsApproved(false);
+                    hikeEntity.setIsPromoted(false);
                     updateHikeDateAndSave(employee);
                     hikeRepository.save(hikeEntity);
                     updateAdminAboutHikeViaMail(hikeEntity,employee);
@@ -60,6 +62,7 @@ public class DailyScheduler {
                 .forEach(hike -> {
                     Employee employee=employeeRepository.findById(hike.getEmployee().getEmployeeID())
                             .orElseThrow(()->new CompanyException(ResCodes.EMPLOYEE_NOT_FOUND));
+                    employee.setDesignation(hike.getNewPosition());
                     employee.setGrossSalary(hike.getNewSalary());
                     employeeRepository.save(employee);
                 });

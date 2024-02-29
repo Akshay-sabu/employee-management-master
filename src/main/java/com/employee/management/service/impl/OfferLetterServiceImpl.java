@@ -38,37 +38,6 @@ public class OfferLetterServiceImpl implements OfferLetterService {
         OfferLetterEntity savedOfferLetter = offerLetterRepository.save(offerLetter);
         return mapper.convertToOfferLetterDto(savedOfferLetter);
     }
-    @Override
-    public byte[] getMergedOfferReport(OfferLetterDTO offerLetterDTO) throws IOException, JRException {
-        CtcData data=calculator.compensationDetails(mapper.convertStringToDoubleAmount(offerLetterDTO.getCtc()));
-
-        JasperReport report1 = JasperCompileManager.compileReport(new ClassPathResource("/templates/offerLetterPages/pageone.jrxml").getInputStream());
-        JasperReport report2 = JasperCompileManager.compileReport(new ClassPathResource("/templates/offerLetterPages/pagetwo.jrxml").getInputStream());
-        JasperReport report3 = JasperCompileManager.compileReport(new ClassPathResource("/templates/offerLetterPages/pagethree.jrxml").getInputStream());
-        JasperReport report4 = JasperCompileManager.compileReport(new ClassPathResource("/templates/offerLetterPages/pagefour.jrxml").getInputStream());
-        Map<String, Object> paramsForReport= new HashMap<>();
-        paramsForReport.put("offer",offerLetterDTO);
-        paramsForReport.put("ctc",data);
-
-
-        JasperPrint jasperPrint1 = JasperFillManager.fillReport(report1, paramsForReport, new JREmptyDataSource());
-        JasperPrint jasperPrint2 = JasperFillManager.fillReport(report2, null, new JREmptyDataSource());
-        JasperPrint jasperPrint3 = JasperFillManager.fillReport(report3, null, new JREmptyDataSource());
-        JasperPrint jasperPrint4 = JasperFillManager.fillReport(report4, paramsForReport, new JREmptyDataSource());
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        JRPdfExporter exporter = new JRPdfExporter();
-        List<JasperPrint> jasperPrints = new ArrayList<>();
-        jasperPrints.add(jasperPrint1);
-        jasperPrints.add(jasperPrint2);
-        jasperPrints.add(jasperPrint3);
-        jasperPrints.add(jasperPrint4);
-        exporter.setExporterInput(SimpleExporterInput.getInstance(jasperPrints));
-        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
-        exporter.exportReport();
-
-        return outputStream.toByteArray();
-    }
 
     @Override
     public CtcData preview(String grossSalary){

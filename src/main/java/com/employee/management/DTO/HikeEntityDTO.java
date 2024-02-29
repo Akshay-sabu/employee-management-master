@@ -12,6 +12,8 @@ public class HikeEntityDTO {
     private String reason;
     private String approvedBy;
     private String approvedDate;
+    private String prevPosition;
+    private String newPosition;
     private Boolean status;
     private String effectiveDate;
 }

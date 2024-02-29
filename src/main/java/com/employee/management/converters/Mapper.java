@@ -160,7 +160,9 @@ public class Mapper {
         hikeEntityDTO.setApprovedDate(dateConverter.localDateTimeToStringConverter(hike.getApprovedDate()));
         hikeEntityDTO.setNewSalary(formatAmountWithCommas(hike.getNewSalary()));
         hikeEntityDTO.setPrevSalary(formatAmountWithCommas(hike.getPrevSalary()));
-        hikeEntityDTO.setStatus(hike.getStatus());
+        hikeEntityDTO.setStatus(hike.getIsApproved());
+        hikeEntityDTO.setNewPosition(hike.getNewPosition());
+        hikeEntityDTO.setPrevPosition(hike.getPrevPosition());
         if(hike.getApprovedBy() !=null)
             hikeEntityDTO.setApprovedBy(hike.getApprovedBy().getEmployeeID());
         return hikeEntityDTO;

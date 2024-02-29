@@ -10,20 +10,11 @@ import com.employee.management.models.*;
 import com.employee.management.repository.*;
 import com.employee.management.service.AdminService;
 import com.employee.management.service.EmailSenderService;
-import com.employee.management.util.CtcCalculator;
 import jakarta.mail.MessagingException;
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
-import net.sf.jasperreports.export.type.PdfVersionEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -34,28 +25,34 @@ import java.util.stream.Collectors;
 
 @Service
 public class AdminServiceImpl implements AdminService {
-    @Autowired
-    EmployeeRepository employeeRepository;
-    @Autowired
-    RoleRepository roleRepository;
-    @Autowired
-    PayrollRepository payrollRepository;
-    @Autowired
-    StatusRepository statusRepository;
+    private final EmployeeRepository employeeRepository;
+    private final RoleRepository roleRepository;
+    private final PayrollRepository payrollRepository;
+    private final StatusRepository statusRepository;
+    private final HikeRepository hikeRepository;
+    private final DateTimeConverter dateTimeConverter;
+    private final Mapper mapper;
+    private final EmailSenderService emailSenderService;
+    private final PasswordEncoder passwordEncoder;
+    private final PDFService pdfService;
 
     @Autowired
-    HikeRepository hikeRepository;
-
-    @Autowired
-    DateTimeConverter dateTimeConverter;
-
-    @Autowired
-    Mapper mapper;
-    @Autowired
-    EmailSenderService emailSenderService;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    public AdminServiceImpl(EmployeeRepository employeeRepository, RoleRepository roleRepository,
+                       PayrollRepository payrollRepository, StatusRepository statusRepository,
+                       HikeRepository hikeRepository, DateTimeConverter dateTimeConverter,
+                       Mapper mapper, EmailSenderService emailSenderService,
+                       PasswordEncoder passwordEncoder, PDFService pdfService) {
+        this.employeeRepository = employeeRepository;
+        this.roleRepository = roleRepository;
+        this.payrollRepository = payrollRepository;
+        this.statusRepository = statusRepository;
+        this.hikeRepository = hikeRepository;
+        this.dateTimeConverter = dateTimeConverter;
+        this.mapper = mapper;
+        this.emailSenderService = emailSenderService;
+        this.passwordEncoder = passwordEncoder;
+        this.pdfService = pdfService;
+    }
 
     @Autowired
     PDFService pdfService;
@@ -152,6 +149,12 @@ public class AdminServiceImpl implements AdminService {
         Employee savedEmployee = employeeRepository.save(employee);
         return mapper.convertToEmployeeDTO(savedEmployee);
     }
+    @Override
+    public String fetchEmployeeDesignation(String empId){
+        Employee employee =employeeRepository.findById(empId)
+                .orElseThrow(()-> new CompanyException(ResCodes.EMPLOYEE_NOT_FOUND));
+        return employee.getDesignation();
+    }
 
     @Override
     public String changeEmployeeStatus(String empId, String empStatus){
@@ -188,12 +191,10 @@ public class AdminServiceImpl implements AdminService {
         String sixMonthAgo = sixMonthsAgo.format(formatter);
 
         List<Payroll> sixMonthData=payrollRepository.findByPayPeriodRange(sixMonthAgo);
-
         Map<String, Double> averageSalaryByPayPeriod = sixMonthData.stream()
                 .filter(Objects::nonNull)
                 .collect(Collectors.groupingBy(Payroll::getPayPeriod,
                         Collectors.averagingDouble(Payroll::getTotalNetPayable)));
-
         return  averageSalaryByPayPeriod.entrySet().stream()
                 .map(entry -> new AvgSalaryGraphResponse(entry.getKey(), String.format("%.2f", entry.getValue())))
                 .toList();
@@ -219,15 +220,20 @@ public class AdminServiceImpl implements AdminService {
         Employee approvedBy=employeeRepository.findById(request.getApprovedBy())
                 .orElseThrow(()->new CompanyException(ResCodes.EMPLOYEE_NOT_FOUND));
         HikeEntity hike=hikeRepository.findByStatusAndEmployee(false,employee)
-                .orElseThrow(()->new CompanyException(ResCodes.HIKE_APPROVED_ALREADY));
-        if(!hike.getStatus()) {
-            hike.setStatus(true);
+
+                .orElseThrow(()->new CompanyException(ResCodes.HIKE_DATA_NOT_FOUND));
+
+        if(!hike.getIsApproved()) {
+            hike.setIsApproved(true);
+            hike.setIsPromoted(request.getNewPosition() != null && !request.getNewPosition().equals("None"));
+
             hike.setHikePercentage(Double.valueOf(request.getPercentage()));
             hike.setApprovedBy(approvedBy);
             hike.setNewSalary((hike.getPrevSalary() * (hike.getHikePercentage() / 100)) + hike.getPrevSalary());
             hike.setApprovedDate(new Date());
             hike.setEffectiveDate(dateTimeConverter.stringToLocalDateTimeConverter(request.getEffectiveDate()));
             hike.setReason(request.getReason());
+            hike.setNewPosition(hike.getIsPromoted()?request.getNewPosition():null);
             HikeEntity savedHike = hikeRepository.save(hike);
             try{
                 sendHikeLetterMail(pdfService.generateHikeLetter(mapper.convertToEmployeeDTO(employee),savedHike),employee.getEmail());
@@ -249,16 +255,23 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(()->new CompanyException(ResCodes.HIKE_APPROVED_ALREADY));
         HikeEntity previewHike=new HikeEntity();
         previewHike.setEmployee(hike.getEmployee());
-        previewHike.setStatus(hike.getStatus());
+
+        previewHike.setIsApproved(hike.getIsApproved());
         previewHike.setPrevSalary(hike.getPrevSalary());
-        if(!previewHike.getStatus()) {
-            previewHike.setStatus(true);
+        previewHike.setPrevPosition(hike.getPrevPosition());
+        if(!previewHike.getIsApproved()) {
+            previewHike.setIsApproved(true);
+            previewHike.setIsPromoted(request.getNewPosition() != null && !request.getNewPosition().equals("None"));
+
             previewHike.setHikePercentage(Double.valueOf(request.getPercentage()));
             previewHike.setApprovedBy(approvedBy);
             previewHike.setNewSalary((hike.getPrevSalary() * (previewHike.getHikePercentage() / 100)) + hike.getPrevSalary());
             previewHike.setApprovedDate(new Date());
             previewHike.setEffectiveDate(dateTimeConverter.stringToLocalDateTimeConverter(request.getEffectiveDate()));
             previewHike.setReason(request.getReason());
+
+            previewHike.setNewPosition(hike.getIsPromoted()?request.getNewPosition():null);
+
             try{
                return pdfService.generateHikeLetter(mapper.convertToEmployeeDTO(employee),previewHike);
             }catch (Exception e){

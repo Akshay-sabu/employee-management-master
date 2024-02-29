@@ -2,6 +2,7 @@ package com.employee.management.controller;
 
 import com.employee.management.DTO.CtcData;
 import com.employee.management.DTO.OfferLetterDTO;
+import com.employee.management.converters.PDFService;
 import com.employee.management.service.EmailSenderService;
 import com.employee.management.service.OfferLetterService;
 import net.sf.jasperreports.engine.JRException;
@@ -18,11 +19,13 @@ public class OfferLetterController {
     OfferLetterService offerLetterService;
     @Autowired
     EmailSenderService emailSenderService;
+    @Autowired
+    PDFService pdfService;
     @PostMapping("/send")
     public ResponseEntity<String> issueOfferLetter(@RequestBody OfferLetterDTO offerLetterDTO) throws JRException, IOException {
         OfferLetterDTO letterDTO=offerLetterService.issueNewOfferLetter(offerLetterDTO);
         try {
-            byte[] pdfBytes = offerLetterService.getMergedOfferReport(letterDTO);
+            byte[] pdfBytes = pdfService.generateMergedOfferReport(letterDTO);
             emailSenderService.sendEmailWithAttachment(letterDTO.getEmail(),"Offer and Appointment Letter ","Congratulations",pdfBytes);
             return new ResponseEntity<>("Email sent successfully",HttpStatus.OK);
         } catch (Exception e) {
@@ -39,7 +42,7 @@ public class OfferLetterController {
     @PostMapping("/preview-letter")
     public ResponseEntity<byte[]> previewLetter(@RequestBody OfferLetterDTO offerLetterDTO) throws JRException, IOException {
         try {
-            byte[] pdfBytes = offerLetterService.getMergedOfferReport(offerLetterDTO);
+            byte[] pdfBytes = pdfService.generateMergedOfferReport(offerLetterDTO);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
@@ -56,7 +59,7 @@ public class OfferLetterController {
     public ResponseEntity<byte[]> previewLetterById(@PathVariable("id") Long id) throws JRException, IOException {
         OfferLetterDTO offerLetterDTO=offerLetterService.get(id);
         try {
-            byte[] pdfBytes = offerLetterService.getMergedOfferReport(offerLetterDTO);
+            byte[] pdfBytes = pdfService.generateMergedOfferReport(offerLetterDTO);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);

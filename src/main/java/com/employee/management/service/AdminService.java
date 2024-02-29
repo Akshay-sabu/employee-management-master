@@ -15,6 +15,8 @@ public interface AdminService {
 
     EmployeeDTO editEmployee(String empId,EmployeeDTO employeeDTO);
 
+    String fetchEmployeeDesignation(String empId);
+
     String changeEmployeeStatus(String empId, String empStatus);
 
     PayrollDTO addPayroll(PayrollDTO payrollDTO,String empId);

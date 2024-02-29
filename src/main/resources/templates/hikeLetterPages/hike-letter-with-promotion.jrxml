@@ -5,9 +5,9 @@
     <property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter (2)"/>
     <parameter name="employee" class="com.employee.management.DTO.EmployeeDTO"/>
     <parameter name="hikeDetails" class="com.employee.management.DTO.HikeEntityDTO"/>
-    <parameter name="hikeAmount" class="java.lang.String"/>
+    <parameter name="hikeAmount" class="java.lang.String
+"/>
     <parameter name="currentDate" class="java.lang.String"/>
-
     <queryString language="SQL">
         <![CDATA[SELECT *
         FROM hike_table h
@@ -65,8 +65,14 @@
             <property name="com.jaspersoft.studio.unit.height" value="px"/>
             <frame>
                 <reportElement x="0" y="0" width="555" height="73" uuid="46625392-fd20-4db6-8b6d-2a77e8be00e0"/>
+                <line>
+                    <reportElement x="2" y="64" width="545" height="1" forecolor="#4271C2" uuid="1d75c5bf-fffc-4f62-8527-79c31c136f04"/>
+                </line>
+                <line>
+                    <reportElement x="2" y="66" width="545" height="1" forecolor="#EBC107" uuid="5d54939c-5201-47a0-b49f-d77f285ab4bf"/>
+                </line>
                 <image>
-                    <reportElement x="10" y="-7" width="80" height="68" uuid="b462cd17-434c-4ca4-b8cc-e3704ed92bc4"/>
+                    <reportElement x="10" y="-7" width="80" height="68" uuid="c4c89fc3-77a9-4c82-b295-a9fd1e637ae7"/>
                     <imageExpression><![CDATA["images/seabed2crest.jpg"]]></imageExpression>
                 </image>
                 <staticText>
@@ -83,25 +89,19 @@
                     </textElement>
                     <text><![CDATA[ 1st floor, R D Rajanna Complex, Rajanukunte,  Yelehanka Taluk Bengaluru, Karnataka 560064]]></text>
                 </staticText>
-                <line>
-                    <reportElement x="2" y="64" width="545" height="1" forecolor="#4271C2" uuid="1d75c5bf-fffc-4f62-8527-79c31c136f04"/>
-                </line>
-                <line>
-                    <reportElement x="2" y="66" width="545" height="1" forecolor="#EBC107" uuid="5d54939c-5201-47a0-b49f-d77f285ab4bf"/>
-                </line>
             </frame>
         </band>
     </title>
     <detail>
         <band height="670" splitType="Stretch">
             <property name="com.jaspersoft.studio.unit.height" value="px"/>
-            <image scaleImage="RealHeight" isUsingCache="true">
-                <reportElement x="89" y="159" width="375" height="320" isPrintWhenDetailOverflows="true" uuid="13959101-f6a6-4918-938c-781f80bd513a"/>
-                <imageExpression><![CDATA["images/seabed_transparent.jpeg"]]></imageExpression>
-            </image>
             <image>
-                <reportElement x="0" y="548" width="200" height="78" uuid="f23446a2-53ce-4905-a0c3-4f7ab71e7ca2"/>
+                <reportElement x="8" y="569" width="219" height="76" uuid="69abd80e-fd94-4a2b-bded-aeb27222634c"/>
                 <imageExpression><![CDATA["images/ceo_sign.jpg"]]></imageExpression>
+            </image>
+            <image scaleImage="RealHeight" isUsingCache="true">
+                <reportElement x="89" y="159" width="375" height="320" isPrintWhenDetailOverflows="true" uuid="51b71157-0dc9-4d53-a281-6bf03e5be6b4"/>
+                <imageExpression><![CDATA["images/seabed_transparent.jpeg"]]></imageExpression>
             </image>
             <staticText>
                 <reportElement x="177" y="36" width="203" height="26" uuid="f5b0ae0f-785e-434f-86ea-8710c5be8b0a"/>
@@ -138,13 +138,6 @@
                 </textElement>
                 <textFieldExpression><![CDATA["<font color='#635E5D'>Designation:</font> " + $P{employee}.getDesignation()]]></textFieldExpression>
             </textField>
-<!--            <textField>-->
-<!--                <reportElement x="24" y="170" width="66" height="20" forecolor="#635E5D" uuid="7941956b-3d32-4e7f-972d-0f8b9ba5aa2c"/>-->
-<!--                <textElement textAlignment="Left">-->
-<!--                    <font fontName="Times New Roman" size="13" isBold="false" isUnderline="false"/>-->
-<!--                </textElement>-->
-<!--                <textFieldExpression><![CDATA[$P{employee}.getLocation()]]></textFieldExpression>-->
-<!--            </textField>-->
             <textField>
                 <reportElement x="430" y="88" width="125" height="19" forecolor="#635E5D" uuid="5797e0a2-4e6b-416c-b28e-fbedce886cc4"/>
                 <textElement verticalAlignment="Middle" markup="html">
@@ -153,49 +146,49 @@
                 <textFieldExpression><![CDATA["Date : "+"<font color='#000000'><style isBold='true'>"+$P{currentDate}+"</style></font>"]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="15" y="202" width="185" height="25" forecolor="#635E5D" uuid="9ab9bfa9-8fa9-4990-9273-d78ee7850ae8"/>
+                <reportElement x="15" y="182" width="185" height="25" forecolor="#635E5D" uuid="9ab9bfa9-8fa9-4990-9273-d78ee7850ae8"/>
                 <textElement verticalAlignment="Middle" markup="html">
                     <font fontName="Times New Roman" size="13" isBold="true"/>
                 </textElement>
                 <textFieldExpression><![CDATA["Dear "+"<font color='#000000'><style isBold='true'>"+$P{employee}.getEmployeeName()+"</style></font>"+","]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="15" y="238" width="528" height="31" forecolor="#635E5D" uuid="bc01b85a-42c0-4e23-b085-57449bf96cb8"/>
+                <reportElement x="15" y="213" width="528" height="31" forecolor="#635E5D" uuid="bc01b85a-42c0-4e23-b085-57449bf96cb8"/>
                 <textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
                     <font fontName="Times New Roman" size="12" isBold="false"/>
                 </textElement>
                 <textFieldExpression><![CDATA["We are delighted to inform you that your hard work and dedication have been recognized, and as a result, we are pleased to offer you a salary hike, effective from <font color='#000000'><style isBold='true'>"+$P{hikeDetails}.getEffectiveDate()+"</style></font>."]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="15" y="283" width="168" height="26" forecolor="#242323" uuid="cf723835-eb37-42e1-b0a8-df72a6e120f8"/>
+                <reportElement x="15" y="308" width="168" height="26" forecolor="#242323" uuid="cf723835-eb37-42e1-b0a8-df72a6e120f8"/>
                 <textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
                     <font fontName="Times New Roman" size="14" isBold="false"/>
                 </textElement>
                 <textFieldExpression><![CDATA["Details of the hike:"]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="19" y="308" width="235" height="18" forecolor="#242323" uuid="3d7876d3-8417-4374-aa47-5e268526f3ee"/>
+                <reportElement x="19" y="333" width="235" height="18" forecolor="#242323" uuid="3d7876d3-8417-4374-aa47-5e268526f3ee"/>
                 <textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
                     <font fontName="Times New Roman" size="12" isBold="false"/>
                 </textElement>
                 <textFieldExpression><![CDATA["- Previous Salary:  "+$P{hikeDetails}.getPrevSalary()]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="19" y="327" width="208" height="17" forecolor="#242323" uuid="8a3c1f5b-0f5e-46e8-a804-f011439f5517"/>
+                <reportElement x="19" y="352" width="208" height="17" forecolor="#242323" uuid="8a3c1f5b-0f5e-46e8-a804-f011439f5517"/>
                 <textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
                     <font fontName="Times New Roman" size="12" isBold="false"/>
                 </textElement>
                 <textFieldExpression><![CDATA["- New Salary:   "+$P{hikeDetails}.getNewSalary()]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="19" y="345" width="168" height="17" forecolor="#242323" uuid="87959b47-c942-4309-b789-773c59f0bc30"/>
+                <reportElement x="19" y="370" width="301" height="17" forecolor="#242323" uuid="87959b47-c942-4309-b789-773c59f0bc30"/>
                 <textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
                     <font fontName="Times New Roman" size="12" isBold="false"/>
                 </textElement>
-                <textFieldExpression><![CDATA["- Hike Amount:   "+$P{hikeAmount}]]></textFieldExpression>
+                <textFieldExpression><![CDATA["- Hike Amount:   "+$P{hikeAmount}+" ("+$P{hikeDetails}.getHikePercentage()+"%)"]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="15" y="378" width="528" height="142" forecolor="#635E5D" uuid="c8f02a3d-b0fd-430c-a342-192598a279a8"/>
+                <reportElement x="15" y="398" width="528" height="132" forecolor="#635E5D" uuid="c8f02a3d-b0fd-430c-a342-192598a279a8"/>
                 <textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
                     <font fontName="Times New Roman" size="12" isBold="false"/>
                 </textElement>
@@ -206,7 +199,7 @@
 "Once again, congratulations on your salary hike! We look forward to your continued success and contributions to [Your Company Name]."]]></textFieldExpression>
             </textField>
             <staticText>
-                <reportElement x="15" y="520" width="75" height="31" forecolor="#635E5D" uuid="365fc5f1-0804-41d2-87d8-b7be55f02d33"/>
+                <reportElement x="15" y="539" width="75" height="31" forecolor="#635E5D" uuid="365fc5f1-0804-41d2-87d8-b7be55f02d33"/>
                 <textElement>
                     <font fontName="Times New Roman" size="12"/>
                 </textElement>
@@ -214,13 +207,20 @@
 Best regards,]]></text>
             </staticText>
             <staticText>
-                <reportElement x="9" y="594" width="127" height="32" uuid="f1078ca4-11c9-4b63-94ec-6ef130c73451"/>
+                <reportElement x="9" y="613" width="127" height="32" uuid="f1078ca4-11c9-4b63-94ec-6ef130c73451"/>
                 <textElement textAlignment="Center">
                     <font fontName="Times New Roman" size="13" isBold="true"/>
                 </textElement>
                 <text><![CDATA[NANDU KASARAM
 Founder & CEO]]></text>
             </staticText>
+            <textField>
+                <reportElement x="15" y="249" width="528" height="42" forecolor="#635E5D" uuid="bfcbda1f-44ec-45a0-9f88-acc1ab41c0ec"/>
+                <textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+                    <font fontName="Times New Roman" size="12" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Additionally, we are pleased to announce your promotion from <font color='#000000'><style isBold='true'>"+$P{hikeDetails}.getPrevPosition()+"</style></font> to <font color='#000000'><style isBold='true'>"+$P{hikeDetails}.getNewPosition()+"</style></font>, effective from <font color='#000000'><style isBold='true'>"+$P{hikeDetails}.getEffectiveDate()+"</style></font>. This promotion is a testament to your exceptional performance and contributions to our organization."]]></textFieldExpression>
+            </textField>
         </band>
     </detail>
     <pageFooter>
@@ -228,13 +228,6 @@ Founder & CEO]]></text>
             <property name="com.jaspersoft.studio.unit.height" value="px"/>
             <frame>
                 <reportElement x="3" y="2" width="550" height="50" uuid="8187bac5-4b10-4269-86ad-1096eb024f93"/>
-                <staticText>
-                    <reportElement x="0" y="9" width="550" height="20" forecolor="#4271C2" uuid="f331fbf4-5aa7-4324-9cca-5527d8ebf862"/>
-                    <textElement textAlignment="Center">
-                        <font size="11"/>
-                    </textElement>
-                    <text><![CDATA[ 1st floor, R D Rajanna Complex, Rajanukunte, Yelehanka Taluk, Bengaluru, Karnataka 560064]]></text>
-                </staticText>
                 <staticText>
                     <reportElement x="28" y="26" width="40" height="20" forecolor="#EBC107" uuid="816add8e-faec-4fa9-9eed-6ca9a2375b07"/>
                     <textElement verticalAlignment="Middle">
@@ -297,6 +290,13 @@ Founder & CEO]]></text>
                 <line>
                     <reportElement x="2" y="1" width="545" height="1" forecolor="#4271C2" uuid="607c8756-d061-49ca-ab62-30f4e429842c"/>
                 </line>
+                <staticText>
+                    <reportElement x="0" y="9" width="550" height="20" forecolor="#4271C2" uuid="749a70e5-6fe5-4355-a9a8-e87930d98057"/>
+                    <textElement textAlignment="Center">
+                        <font size="11"/>
+                    </textElement>
+                    <text><![CDATA[ 1st floor, R D Rajanna Complex, Rajanukunte, Yelehanka Taluk, Bengaluru, Karnataka 560064]]></text>
+                </staticText>
             </frame>
         </band>
     </pageFooter>

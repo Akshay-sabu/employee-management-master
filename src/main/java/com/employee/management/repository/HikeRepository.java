@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface HikeRepository extends JpaRepository<HikeEntity, Long> {
-    @Query("SELECT h FROM HikeEntity h WHERE h.status = :status AND h.employee = :employee")
+    @Query("SELECT h FROM HikeEntity h WHERE h.isApproved = :status AND h.employee = :employee")
     Optional<HikeEntity> findByStatusAndEmployee(boolean status, Employee employee);
-    @Query("SELECT h FROM HikeEntity h WHERE h.status = false")
+    @Query("SELECT h FROM HikeEntity h WHERE h.isApproved = false")
     List<HikeEntity> findAllByStatusFalse();
     List<HikeEntity>findByEffectiveDate(Date date);
     Optional<HikeEntity>findByEmployee(Employee employee);
