@@ -1,4 +1,4 @@
-package com.employee.management.service.impl;
+package com.employee.management.service;
 
 import com.employee.management.DTO.EmployeeDetails;
 import com.employee.management.exception.CompanyException;

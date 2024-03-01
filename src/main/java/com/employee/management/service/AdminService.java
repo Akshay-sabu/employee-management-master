@@ -21,6 +21,8 @@ public interface AdminService {
 
     PayrollDTO addPayroll(PayrollDTO payrollDTO,String empId);
 
+    PayrollDTO addMonthlyPayRoll(AddMonthlyPayRollRequest request);
+
     List<AvgSalaryGraphResponse> getSalaryGraphDataForPastSixMonths();
     String updatePfDetails(PfNumberUpdateRequest request);
 

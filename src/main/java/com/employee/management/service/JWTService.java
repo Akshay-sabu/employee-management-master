@@ -1,4 +1,4 @@
-package com.employee.management.util;
+package com.employee.management.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -1,7 +1,7 @@
 package com.employee.management.controller;
 import com.employee.management.DTO.PaySlip;
 import com.employee.management.converters.AmountToWordsConverter;
-import com.employee.management.converters.PDFService;
+import com.employee.management.service.PDFService;
 import com.employee.management.service.EmailSenderService;
 import com.employee.management.service.EmployeeService;
 import com.employee.management.service.PayRollService;
@@ -42,7 +42,6 @@ public class PayRollController {
             byte[] pdfBytes = pdfService.generatePaySlipPdf(paySlip, amountInWords);
 
             emailSenderService.sendEmailWithAttachment(paySlip.getEmployeeDTO().getEmail(),"Salary slip","Salary details of period "+payPeriod+"attaching below",pdfBytes);
-
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
             headers.setContentDispositionFormData("filename", "pay_slip(" + paySlip.getEmployeeDTO().getEmployeeName()+ "_" + paySlip.getPayrollDTO().getPayPeriod() + ").pdf");
@@ -50,8 +49,11 @@ public class PayRollController {
                     .headers(headers)
                     .body(pdfBytes);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+//    public ResponseEntity<String>generateMailReceipt(@RequestParam("employeeId") String empId,
+//                                                     @RequestParam("payPeriod") String payPeriod){
+//
+//    }
 }

@@ -1,13 +1,11 @@
 package com.employee.management.controller;
 
-import com.employee.management.DTO.ChangePasswordRequest;
 import com.employee.management.DTO.EmployeeDTO;
-import com.employee.management.DTO.ForgetPasswordRequest;
 import com.employee.management.exception.CompanyException;
 import com.employee.management.exception.ResCodes;
 import com.employee.management.service.AttendanceService;
 import com.employee.management.service.EmployeeService;
-import com.employee.management.util.JWTService;
+import com.employee.management.service.JWTService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
